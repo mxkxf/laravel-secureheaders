@@ -1,0 +1,19 @@
+{
+    "name": "mikefrancis/laravel-secureheaders",
+    "description": "Secure Headers wrapper for Laravel.",
+    "type": "library",
+    "require": {
+        "laravel/framework": "^5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mike Francis",
+            "email": "mikeffrancis@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
