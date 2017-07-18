@@ -6,7 +6,6 @@ use Aidantwoods\SecureHeaders\SecureHeaders;
 use Closure;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class ApplySecureHeaders
 {
@@ -50,7 +49,9 @@ class ApplySecureHeaders
         $this->generateHsts();
         $this->generateCsp();
 
-        $response = $this->setHeaders($response);
+        $adapter = new Adapter($response);
+
+        $this->headers->apply($adapter);
 
         return $response;
     }
@@ -83,21 +84,5 @@ class ApplySecureHeaders
                 $this->headers->safeMode();
             }
         }
-    }
-
-    /**
-     * Set the headers on the response.
-     *
-     * @param Response $response
-     * @return Response
-     */
-    private function setHeaders(Response $response): Response
-    {
-        foreach ($this->headers as $header) {
-            /** @var \Aidantwoods\SecureHeaders\Headers\RegularHeader $header */
-            $response->headers->set($header->getName(), $header->getValue());
-        }
-
-        return $response;
     }
 }
