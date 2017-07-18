@@ -1,7 +1,14 @@
 {
     "name": "mikefrancis/laravel-secureheaders",
-    "description": "Secure Headers wrapper for Laravel.",
+    "description": "SecureHeaders wrapper for Laravel.",
     "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mike Francis",
+            "email": "mikeffrancis@gmail.com"
+        }
+    ],
     "require": {
         "laravel/framework": "^5.4",
         "aidantwoods/secureheaders": "^2.0"
@@ -14,13 +21,6 @@
             "MikeFrancis\\LaravelSecureHeaders\\": "src/"
         }
     },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Mike Francis",
-            "email": "mikeffrancis@gmail.com"
-        }
-    ],
     "minimum-stability": "dev",
     "prefer-stable": true
 }
