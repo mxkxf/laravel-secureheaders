@@ -59,7 +59,7 @@ class Adapter implements HttpAdapter
             if ($header->getName() === 'set-cookie') {
                 continue;
             }
-            $this->response->headers->set($header->getName(), $header->getValue());
+            $this->response->headers->set($header->getName(), $header->getValue(), false);
         }
     }
 
