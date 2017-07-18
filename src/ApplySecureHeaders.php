@@ -19,7 +19,7 @@ class ApplySecureHeaders
 
     /**
      * Instance of SecureHeaders Utility.
-     * 
+     *
      * @var SecureHeaders
      */
     private $headers;
