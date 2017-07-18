@@ -15,4 +15,16 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/secure-headers.php', 'secure-headers');
     }
+
+    /**
+     * Perform post-registration booting of services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->publishes([
+            __DIR__ . '/../config/secure-headers.php' => config_path('secure-headers.php'),
+        ]);
+    }
 }
