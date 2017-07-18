@@ -63,11 +63,9 @@ class ApplySecureHeaders
      */
     private function generateCsp(): void
     {
-        $csps = $this->config->get('secure-headers.csp', []);
+        $csp = $this->config->get('secure-headers.csp', []);
 
-        foreach ($csps as $key => $value) {
-            $this->headers->csp($key, $value);
-        }
+        $this->headers->csp($csp);
     }
 
     /**
