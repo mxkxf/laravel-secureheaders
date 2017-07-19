@@ -1,6 +1,6 @@
 # Laravel SecureHeaders
 
-Secure Headers wrapper for Laravel.
+SecureHeaders wrapper for Laravel.
 
 Based on [aidantwoods/SecureHeaders](https://github.com/aidantwoods/SecureHeaders).
 
@@ -27,4 +27,12 @@ protected $middleware = [
     // ...
     \MikeFrancis\LaravelSecureHeaders\ApplySecureHeaders::class,
 ];
+```
+
+## Configuration
+
+Some sensible defaults have been set in `config/secure-headers.php` but if you'd like to change these, copy the file to your own application's config using the following command:
+
+```bash
+php artisan vendor:publish --provider="MikeFrancis\LaravelSecureHeaders\ServiceProvider"
 ```
