@@ -36,3 +36,38 @@ Some sensible defaults have been set in `config/secure-headers.php` but if you'd
 ```bash
 php artisan vendor:publish --provider="MikeFrancis\LaravelSecureHeaders\ServiceProvider"
 ```
+
+A typical configuration might look like this:
+
+```php
+<?php
+
+return [
+    // HSTS Strict-Transport-Security
+    'hsts' => [
+        'enabled' => true,
+        'safeMode' => false,
+    ],
+
+    // Content Security Policy
+    'csp' => [
+        'default' => [
+            'self',
+        ],
+        'img-src' => [
+            '*', // Allow images from anywhere
+        ],
+        'style-src' => [
+            'self',
+            'unsafe-inline', // Allow inline styles
+            'https://fonts.googleapis.com', // Allow stylesheets from Google Fonts
+        ],
+        'font-src' => [
+            'self',
+            'https://fonts.gstatic.com', // Allow fonts from the Google Fonts CDN
+        ],
+    ],
+];
+```
+
+For a full reference of Content Security Policy directives and their values, see [content-security-policy.com](https://content-security-policy.com).
