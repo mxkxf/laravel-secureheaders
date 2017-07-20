@@ -1,0 +1,8 @@
+language: php
+
+versions:
+  - 7.0.x
+  - 7.1.x
+
+install:
+  composer install --quiet --no-interaction
