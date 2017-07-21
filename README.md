@@ -1,5 +1,7 @@
 # Laravel SecureHeaders
 
+[![Build Status](https://travis-ci.org/mikefrancis/laravel-secureheaders.svg?branch=master)](https://travis-ci.org/mikefrancis/laravel-secureheaders) [![codecov](https://codecov.io/gh/mikefrancis/laravel-secureheaders/branch/master/graph/badge.svg)](https://codecov.io/gh/mikefrancis/laravel-secureheaders)
+
 SecureHeaders wrapper for Laravel.
 
 Based on [aidantwoods/SecureHeaders](https://github.com/aidantwoods/SecureHeaders).

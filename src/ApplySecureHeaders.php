@@ -61,7 +61,7 @@ class ApplySecureHeaders
      *
      * @return void
      */
-    private function generateCsp(): void
+    private function generateCsp()
     {
         $csp = $this->config->get('secure-headers.csp', []);
 
@@ -73,7 +73,7 @@ class ApplySecureHeaders
      *
      * @return void
      */
-    private function generateHsts(): void
+    private function generateHsts()
     {
         if ($this->config->get('secure-headers.hsts.enabled')) {
             $this->headers->hsts();
