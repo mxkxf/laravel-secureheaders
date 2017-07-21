@@ -5,13 +5,10 @@ php:
   - '7.1'
 
 install:
-  - composer require satooshi/php-coveralls
-
-before_script:
-  - mkdir -p build/logs
+  - composer install --no-interaction
 
 script:
-  - phpunit --coverage-clover build/logs/clover.xml
+  - phpunit --coverage-clover=coverage.xml
 
 after_success:
-  - php vendor/bin/coveralls
+  - bash <(curl -s https://codecov.io/bash)
