@@ -11,8 +11,8 @@
     ],
     "require": {
         "php": "7.x",
-        "laravel/framework": "^5.4",
-        "aidantwoods/secureheaders": "^2.0"
+        "aidantwoods/secureheaders": "^2.0",
+        "illuminate/http": "^5.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2"
