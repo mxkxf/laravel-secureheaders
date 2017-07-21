@@ -24,7 +24,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "MikeFrancis\\LaravelSecureHeaders\\": "src/"
+            "MikeFrancis\\LaravelSecureHeaders\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev",
