@@ -1,6 +1,6 @@
 # Laravel SecureHeaders
 
-[![Build Status](https://travis-ci.org/mikefrancis/laravel-secureheaders.svg?branch=master)](https://travis-ci.org/mikefrancis/laravel-secureheaders)
+[![Build Status](https://travis-ci.org/mikefrancis/laravel-secureheaders.svg?branch=master)](https://travis-ci.org/mikefrancis/laravel-secureheaders) [![Coverage Status](https://coveralls.io/repos/github/mikefrancis/laravel-secureheaders/badge.svg?branch=master)](https://coveralls.io/github/mikefrancis/laravel-secureheaders?branch=master)
 
 SecureHeaders wrapper for Laravel.
 
