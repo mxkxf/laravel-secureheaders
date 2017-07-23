@@ -22,10 +22,10 @@ class ApplySecureHeadersTest extends TestCase
         $config->method('get')->willReturn(['csp' => []]);
 
         $request = new Request();
-        $request->headers->set('set-cookie', 'someCookieToIgnore');
 
         $response = new Response();
-        
+        $response->headers->set('set-cookie', 'someCookieToIgnore');
+
         $secureHeaders = new SecureHeaders();
 
         $middleware = new ApplySecureHeaders($config, $secureHeaders);
