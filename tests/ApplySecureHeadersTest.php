@@ -20,9 +20,12 @@ class ApplySecureHeadersTest extends TestCase
     {
         $config = $this->createMock(Repository::class);
         $config->method('get')->willReturn(['csp' => []]);
-        
+
         $request = new Request();
+        $request->headers->set('set-cookie', 'someCookieToIgnore');
+
         $response = new Response();
+        
         $secureHeaders = new SecureHeaders();
 
         $middleware = new ApplySecureHeaders($config, $secureHeaders);
