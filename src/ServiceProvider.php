@@ -13,7 +13,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/secure-headers.php', 'secure-headers');
+        $this->mergeConfigFrom($this->getConfigPath(), 'secure-headers');
     }
 
     /**
@@ -24,7 +24,17 @@ class ServiceProvider extends IlluminateServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../config/secure-headers.php' => config_path('secure-headers.php'),
+            $this->getConfigPath() => config_path('secure-headers.php'),
         ]);
+    }
+
+    /**
+     * Get the path to the config.
+     *
+     * @return string
+     */
+    private function getConfigPath(): string
+    {
+        return __DIR__ . '/../config/secure-headers.php';
     }
 }
