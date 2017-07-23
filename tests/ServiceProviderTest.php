@@ -2,6 +2,7 @@
 
 namespace MikeFrancis\LaravelSecureHeaders\Tests;
 
+use Illuminate\Contracts\Config\Repository;
 use MikeFrancis\LaravelSecureHeaders\ServiceProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +15,14 @@ class ServiceProviderTest extends TestCase
      */
     public function testServiceProviderCanRegister()
     {
-        $serviceProvider = $this->createPartialMock(ServiceProvider::class, ['mergeConfigFrom']);
+        $config = $this->createMock(Repository::class);
+        $config->method('get')->willReturn([]);
+
+        $app = [
+            'config' => $config,
+        ];
+
+        $serviceProvider = new ServiceProvider($app);
         $serviceProvider->register();
     }
 
@@ -25,7 +33,14 @@ class ServiceProviderTest extends TestCase
      */
     public function testServiceProviderCanBoot()
     {
-        $serviceProvider = $this->createPartialMock(ServiceProvider::class, ['publishes']);
+        $config = $this->createMock(Repository::class);
+        $config->method('get')->willReturn([]);
+
+        $app = [
+            'config' => $config,
+        ];
+
+        $serviceProvider = new ServiceProvider($app);
         $serviceProvider->boot();
     }
 }
