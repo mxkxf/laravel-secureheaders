@@ -19,6 +19,8 @@ class ApplySecureHeadersTest extends TestCase
     public function testMiddlewareAddsAppropriateHeaders()
     {
         $config = $this->createMock(Repository::class);
+        $config->method('get')->willReturn(['csp' => []]);
+        
         $request = new Request();
         $response = new Response();
         $secureHeaders = new SecureHeaders();
