@@ -20,6 +20,8 @@ class ApplySecureHeadersTest extends TestCase
     {
         $config = $this->createMock(Repository::class);
         $config->method('get')->willReturn(['csp' => []]);
+        $config->method('get')->willReturn(true); // hsts
+        $config->method('get')->willReturn(true); // safeMode
 
         $request = new Request();
 

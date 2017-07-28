@@ -46,8 +46,9 @@ class ApplySecureHeaders
     {
         $response = $next($request);
 
-        $this->generateHsts();
-        $this->generateCsp();
+        $this->setHsts();
+        $this->setCsp();
+        $this->setMode();
 
         $adapter = new Adapter($response);
 
@@ -57,11 +58,11 @@ class ApplySecureHeaders
     }
 
     /**
-     * Generate any Content Security Policy headers.
+     * Set any Content Security Policy headers.
      *
      * @return void
      */
-    private function generateCsp()
+    private function setCsp()
     {
         $csp = $this->config->get('secure-headers.csp', []);
 
@@ -69,18 +70,26 @@ class ApplySecureHeaders
     }
 
     /**
-     * Generate any Strict-Transport-Policy headers.
+     * Set any Strict-Transport-Policy headers.
      *
      * @return void
      */
-    private function generateHsts()
+    private function setHsts()
     {
-        if ($this->config->get('secure-headers.hsts.enabled')) {
+        if ($this->config->get('secure-headers.hsts.enabled', false)) {
             $this->headers->hsts();
+        }
+    }
 
-            if ($this->config->get('secure-headers.hsts.safeMode')) {
-                $this->headers->safeMode();
-            }
+    /**
+     * Set safe mode, if it is required.
+     *
+     * @return void
+     */
+    private function setMode()
+    {
+        if ($this->config->get('secure-headers.safeMode', false)) {
+            $this->headers->safeMode();
         }
     }
 }
