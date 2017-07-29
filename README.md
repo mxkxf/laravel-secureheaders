@@ -45,10 +45,12 @@ A typical configuration might look like this:
 <?php
 
 return [
+    // Safe Mode
+    'safeMode' => false,
+
     // HSTS Strict-Transport-Security
     'hsts' => [
         'enabled' => true,
-        'safeMode' => false,
     ],
 
     // Content Security Policy
