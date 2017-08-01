@@ -48,17 +48,10 @@ class Adapter implements HttpAdapter
         $headersToRemove = $this->response->headers->all();
 
         foreach ($headersToRemove as $name => $headerLines) {
-            if ($name === 'set-cookie') {
-                continue;
-            }
-
             $this->response->headers->remove($name);
         }
 
         foreach ($headers->get() as $header) {
-            if ($header->getName() === 'set-cookie') {
-                continue;
-            }
             $this->response->headers->set($header->getName(), $header->getValue(), false);
         }
     }
