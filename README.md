@@ -1,6 +1,6 @@
 # Laravel SecureHeaders
 
-[![Build Status](https://travis-ci.org/mikefrancis/laravel-secureheaders.svg?branch=master)](https://travis-ci.org/mikefrancis/laravel-secureheaders) [![codecov](https://codecov.io/gh/mikefrancis/laravel-secureheaders/branch/master/graph/badge.svg)](https://codecov.io/gh/mikefrancis/laravel-secureheaders)
+[![Packagist](https://img.shields.io/packagist/v/mikefrancis/laravel-secureheaders.svg)](https://packagist.org/packages/mikefrancis/laravel-secureheaders) [![Build Status](https://travis-ci.org/mikefrancis/laravel-secureheaders.svg?branch=master)](https://travis-ci.org/mikefrancis/laravel-secureheaders) [![codecov](https://codecov.io/gh/mikefrancis/laravel-secureheaders/branch/master/graph/badge.svg)](https://codecov.io/gh/mikefrancis/laravel-secureheaders)
 
 SecureHeaders wrapper for Laravel.
 
@@ -60,10 +60,12 @@ A typical configuration might look like this:
 <?php
 
 return [
+    // Safe Mode
+    'safeMode' => false,
+
     // HSTS Strict-Transport-Security
     'hsts' => [
         'enabled' => true,
-        'safeMode' => false,
     ],
 
     // Content Security Policy

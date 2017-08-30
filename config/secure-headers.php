@@ -1,10 +1,12 @@
 <?php
 
 return [
+    // Safe mode
+    'safeMode' => false,
+
     // HSTS Strict-Transport-Security
     'hsts' => [
         'enabled' => true,
-        'safeMode' => false,
     ],
 
     // Content Security Policy
