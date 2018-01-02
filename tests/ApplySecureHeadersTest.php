@@ -18,10 +18,17 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testMiddlewareAddsAppropriateHeaders()
     {
+        // configuration
+        $map = [
+            ['secure-headers.csp', [], ['csp' => []]],
+            ['secure-headers.hsts.enabled', false, true],
+            ['secure-headers.safeMode', false, true],
+        ];
+
         $config = $this->createMock(Repository::class);
-        $config->method('get')->willReturn(['csp' => []]);
-        $config->method('get')->willReturn(true); // hsts
-        $config->method('get')->willReturn(true); // safeMode
+        $config->method('get')->will($this->returnValueMap($map));
+        // return default (second arg) if not in configuration
+        $config->method('get')->will($this->returnArgument(1));
 
         $request = new Request();
 
