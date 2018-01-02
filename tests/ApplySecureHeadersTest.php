@@ -20,6 +20,17 @@ class ApplySecureHeadersTest extends TestCase
     {
         $response = $this->applySecureHeadersWithConfig(new Response());
         $headers = $response->headers->all();
+        // configuration
+        $map = [
+            ['secure-headers.csp', [], ['csp' => []]],
+            ['secure-headers.hsts.enabled', false, true],
+            ['secure-headers.safeMode', false, true],
+        ];
+
+        $config = $this->createMock(Repository::class);
+        $config->method('get')->will($this->returnValueMap($map));
+        // return default (second arg) if not in configuration
+        $config->method('get')->will($this->returnArgument(1));
 
         $this->assertArrayHasKey('x-xss-protection', $headers);
         $this->assertArrayHasKey('x-frame-options', $headers);
