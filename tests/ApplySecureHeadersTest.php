@@ -193,7 +193,7 @@ class ApplySecureHeadersTest extends TestCase
      */
     private function applySecureHeadersWithConfig(
         Response $response,
-        ?array $configMap = null
+        array $configMap = null
     ) {
         $config = $this->createMock(Repository::class);
         if (isset($configMap)) {
