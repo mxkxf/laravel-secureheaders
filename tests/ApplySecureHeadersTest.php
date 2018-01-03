@@ -23,6 +23,111 @@ class ApplySecureHeadersTest extends TestCase
     }
 
     /**
+     * Ensure that hsts is applied.
+     *
+     * @return void
+     */
+    public function testHsts()
+    {
+        // configuration
+        $configMap = [
+            ['secure-headers.hsts.enabled', false, true],
+        ];
+
+        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $headers = $result->headers->all();
+
+        $this->assertArrayHasKey('strict-transport-security', $headers);
+        $this->assertSame($headers['strict-transport-security'][0], 'max-age=31536000');
+        $this->assertBaseHeadersPresent($headers);
+    }
+
+    /**
+     * Ensure that hsts max-age is applied.
+     *
+     * @return void
+     */
+    public function testHstsMaxAge()
+    {
+        // configuration
+        $configMap = [
+            ['secure-headers.hsts.enabled', false, true],
+            ['secure-headers.hsts.max-age', null, 1337],
+        ];
+
+        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $headers = $result->headers->all();
+
+        $this->assertArrayHasKey('strict-transport-security', $headers);
+        $this->assertSame($headers['strict-transport-security'][0], 'max-age=1337');
+        $this->assertBaseHeadersPresent($headers);
+    }
+
+    /**
+     * Ensure that hsts includeSubdomains is applied.
+     *
+     * @return void
+     */
+    public function testHstsSubdomains()
+    {
+        // configuration
+        $configMap = [
+            ['secure-headers.hsts.enabled', false, true],
+            ['secure-headers.hsts.include-subdomains', null, true],
+        ];
+
+        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $headers = $result->headers->all();
+
+        $this->assertArrayHasKey('strict-transport-security', $headers);
+        $this->assertSame($headers['strict-transport-security'][0], 'max-age=31536000; includeSubDomains');
+        $this->assertBaseHeadersPresent($headers);
+    }
+
+    /**
+     * Ensure that hsts preload is applied.
+     *
+     * @return void
+     */
+    public function testHstsPreload()
+    {
+        // configuration
+        $configMap = [
+            ['secure-headers.hsts.enabled', false, true],
+            ['secure-headers.hsts.preload', null, true],
+        ];
+
+        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $headers = $result->headers->all();
+
+        $this->assertArrayHasKey('strict-transport-security', $headers);
+        $this->assertSame($headers['strict-transport-security'][0], 'max-age=31536000; preload');
+        $this->assertBaseHeadersPresent($headers);
+    }
+
+    /**
+     * Ensure that hsts preload is applied.
+     *
+     * @return void
+     */
+    public function testHstsSubdomainsAndPreload()
+    {
+        // configuration
+        $configMap = [
+            ['secure-headers.hsts.enabled', false, true],
+            ['secure-headers.hsts.include-subdomains', null, true],
+            ['secure-headers.hsts.preload', null, true],
+        ];
+
+        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $headers = $result->headers->all();
+
+        $this->assertArrayHasKey('strict-transport-security', $headers);
+        $this->assertSame($headers['strict-transport-security'][0], 'max-age=31536000; includeSubDomains; preload');
+        $this->assertBaseHeadersPresent($headers);
+    }
+
+    /**
      * Ensure that safe-mode neuters hsts.
      *
      * @return void
