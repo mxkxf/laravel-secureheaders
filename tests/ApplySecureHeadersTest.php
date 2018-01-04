@@ -159,13 +159,66 @@ class ApplySecureHeadersTest extends TestCase
     {
         $time = time();
         $config = [
-            'maxAge' => $time,
+            'expectCT.maxAge' => $time,
         ];
 
-        $response = $this->applySecureHeadersWithConfig(new Response(), 'expectCT', $config);
+        $response = $this->applySecureHeadersWithConfig(new Response, $config);
         $headers = $response->headers->all();
 
         $this->assertEquals("max-age={$time}", $headers['expect-ct'][0]);
+    }
+
+    /*
+     * Ensure that safe-mode neuters strict-mode.
+     *
+     * @return void
+     */
+    public function testStrictModeAndSafeMode()
+    {
+        // configuration
+        $configMap = [
+            ['secure-headers.strictMode', false, true],
+            ['secure-headers.safeMode', false, true],
+        ];
+
+        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $headers = $result->headers->all();
+
+        $this->assertArrayHasKey('strict-transport-security', $headers);
+        $this->assertSame($headers['strict-transport-security'][0], 'max-age=86400');
+        $this->assertArrayHasKey('expect-ct', $headers);
+        $this->assertSame($headers['expect-ct'][0], 'max-age=31536000');
+        $this->assertBaseHeadersPresent($headers);
+    }
+
+    /**
+     * Ensure that strict-mode applies strictness.
+     *
+     * @return void
+     */
+    public function testStrictMode()
+    {
+        // configuration
+        $configMap = [
+            ['secure-headers.strictMode', false, true],
+        ];
+
+        $response = new Response;
+        $response->headers->set('set-cookie', 'session=secret');
+        $response->headers->set('content-security-policy', "default-src 'nonce-1234'");
+
+        $result  = $this->applySecureHeadersWithConfig($response, $configMap);
+        $headers = $result->headers->all();
+
+        $this->assertArrayHasKey('strict-transport-security', $headers);
+        $this->assertSame($headers['strict-transport-security'][0], 'max-age=31536000; includeSubDomains; preload');
+        $this->assertArrayHasKey('expect-ct', $headers);
+        $this->assertSame($headers['expect-ct'][0], 'max-age=31536000; enforce');
+        $this->assertArrayHasKey('set-cookie', $headers);
+        $this->assertSame($headers['set-cookie'][0], 'session=secret; path=/; secure; httponly; samesite=strict');
+        $this->assertArrayHasKey('content-security-policy', $headers);
+        $this->assertSame($headers['content-security-policy'][0], "default-src 'nonce-1234' 'strict-dynamic'");
+        $this->assertBaseHeadersPresent($headers);
     }
 
     /**

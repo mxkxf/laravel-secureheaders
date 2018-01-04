@@ -107,6 +107,10 @@ class ApplySecureHeaders
         if ($this->config->get('secure-headers.safeMode', false)) {
             $this->headers->safeMode();
         }
+
+        if ($this->config->get('secure-headers.strictMode', false)) {
+            $this->headers->strictMode();
+        }
     }
 
     /**
