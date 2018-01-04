@@ -66,8 +66,10 @@ class ApplySecureHeaders
     private function setCsp()
     {
         $csp = $this->config->get('secure-headers.csp', []);
-
         $this->headers->csp($csp);
+
+        $cspro = $this->config->get('secure-headers.cspro', []);
+        $this->headers->cspro($cspro);
     }
 
     /**

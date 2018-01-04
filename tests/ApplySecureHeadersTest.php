@@ -222,6 +222,62 @@ class ApplySecureHeadersTest extends TestCase
     }
 
     /**
+     * Ensure that CSP is applied.
+     *
+     * @return void
+     */
+    public function testCSP()
+    {
+        // configuration
+        $configMap = [
+            ['secure-headers.csp', [], [
+                'default' => 'self',
+                'base' => 'self',
+                'script' => ['https://example.com', 'self'],
+                'object' => ['none'],
+            ]],
+        ];
+
+        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $headers = $result->headers->all();
+
+        $this->assertArrayHasKey('content-security-policy', $headers);
+        $this->assertSame(
+            $headers['content-security-policy'][0],
+            "default-src 'self'; base-uri 'self'; script-src https://example.com 'self'; object-src 'none'"
+        );
+        $this->assertBaseHeadersPresent($headers);
+    }
+
+    /**
+     * Ensure that CSP report-only is applied.
+     *
+     * @return void
+     */
+    public function testCSPRO()
+    {
+        // configuration
+        $configMap = [
+            ['secure-headers.cspro', [], [
+                'default' => 'self',
+                'base' => 'self',
+                'script' => ['https://example.com', 'self'],
+                'object' => ['none'],
+            ]],
+        ];
+
+        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $headers = $result->headers->all();
+
+        $this->assertArrayHasKey('content-security-policy-report-only', $headers);
+        $this->assertSame(
+            $headers['content-security-policy-report-only'][0],
+            "default-src 'self'; base-uri 'self'; script-src https://example.com 'self'; object-src 'none'"
+        );
+        $this->assertBaseHeadersPresent($headers);
+    }
+
+    /**
      * Assert base headers are present given an array of headers.
      *
      * @param array<string, string[]> $headers
