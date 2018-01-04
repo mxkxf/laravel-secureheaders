@@ -78,14 +78,14 @@ class ApplySecureHeaders
     private function setHsts()
     {
         if ($this->config->get('secure-headers.hsts.enabled', false)) {
-            $maxAge = $this->config->get('secure-headers.hsts.max-age');
+            $maxAge = $this->config->get('secure-headers.hsts.maxAge');
             if (isset($maxAge)) {
                 $this->headers->hsts($maxAge);
             } else {
                 $this->headers->hsts();
             }
 
-            $subdomains = $this->config->get('secure-headers.hsts.include-subdomains');
+            $subdomains = $this->config->get('secure-headers.hsts.includeSubDomains');
             if (isset($subdomains)) {
                 $this->headers->hstsSubdomains($subdomains);
             }

@@ -52,7 +52,7 @@ class ApplySecureHeadersTest extends TestCase
         // configuration
         $configMap = [
             ['secure-headers.hsts.enabled', false, true],
-            ['secure-headers.hsts.max-age', null, 1337],
+            ['secure-headers.hsts.maxAge', null, 1337],
         ];
 
         $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
@@ -73,7 +73,7 @@ class ApplySecureHeadersTest extends TestCase
         // configuration
         $configMap = [
             ['secure-headers.hsts.enabled', false, true],
-            ['secure-headers.hsts.include-subdomains', null, true],
+            ['secure-headers.hsts.includeSubDomains', null, true],
         ];
 
         $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
@@ -115,7 +115,7 @@ class ApplySecureHeadersTest extends TestCase
         // configuration
         $configMap = [
             ['secure-headers.hsts.enabled', false, true],
-            ['secure-headers.hsts.include-subdomains', null, true],
+            ['secure-headers.hsts.includeSubDomains', null, true],
             ['secure-headers.hsts.preload', null, true],
         ];
 
