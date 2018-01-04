@@ -98,7 +98,7 @@ class ApplySecureHeaders
     }
 
     /**
-     * Set safe mode, if it is required.
+     * Set safe or (inclusive) strict mode, if it is required.
      *
      * @return void
      */

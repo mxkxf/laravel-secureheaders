@@ -23,7 +23,7 @@ class ApplySecureHeadersTest extends TestCase
     }
 
     /**
-     * Ensure that hsts is applied.
+     * Ensure that HSTS is applied.
      *
      * @return void
      */
@@ -43,7 +43,7 @@ class ApplySecureHeadersTest extends TestCase
     }
 
     /**
-     * Ensure that hsts max-age is applied.
+     * Ensure that HSTS max-age is applied.
      *
      * @return void
      */
@@ -64,7 +64,7 @@ class ApplySecureHeadersTest extends TestCase
     }
 
     /**
-     * Ensure that hsts includeSubdomains is applied.
+     * Ensure that HSTS includeSubdomains is applied.
      *
      * @return void
      */
@@ -85,7 +85,7 @@ class ApplySecureHeadersTest extends TestCase
     }
 
     /**
-     * Ensure that hsts preload is applied.
+     * Ensure that HSTS preload is applied.
      *
      * @return void
      */
@@ -106,7 +106,7 @@ class ApplySecureHeadersTest extends TestCase
     }
 
     /**
-     * Ensure that hsts preload is applied.
+     * Ensure that HSTS subdomains and preload is applied.
      *
      * @return void
      */
@@ -128,7 +128,7 @@ class ApplySecureHeadersTest extends TestCase
     }
 
     /**
-     * Ensure that safe-mode neuters hsts.
+     * Ensure that safe-mode neuters HSTS.
      *
      * @return void
      */
