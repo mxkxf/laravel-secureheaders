@@ -26,6 +26,46 @@ class ApplySecureHeadersTest extends TestCase
     }
 
     /**
+     * Ensure that the middleware enables safe mode.
+     *
+     * @return void
+     */
+    public function testMiddlewareAddsHSTSHeaders()
+    {
+        $config = [
+            'hsts' => [
+                'enabled' => true,
+            ],
+        ];
+
+        $response = $this->applySecureHeadersWithConfig(new Response(), 'hsts.enabled', $config);
+        $headers = $response->headers->all();
+
+        $this->assertArrayHasKey('strict-transport-security', $headers);
+    }
+
+    /**
+     * Ensure that the middleware enables safe mode.
+     *
+     * @return void
+     */
+    public function testMiddlewareEnablesSafeMode()
+    {
+        $config = [
+            'hsts' => [
+                'enabled' => true,
+            ],
+            'safeMode' => true,
+        ];
+
+        $response1 = $this->applySecureHeadersWithConfig(new Response(), 'hsts.enabled', $config);
+        $response2 = $this->applySecureHeadersWithConfig($response1, 'safeMode', $config);
+        $headers = $response2->headers->all();
+
+        $this->assertNotEquals('max-age=31536000', $headers['strict-transport-security'][0]);
+    }
+
+    /**
      * Ensure that the middleware adds the CSP headers.
      *
      * @return void
