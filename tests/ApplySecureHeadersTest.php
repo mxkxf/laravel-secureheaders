@@ -165,7 +165,9 @@ class ApplySecureHeadersTest extends TestCase
         $response = $this->applySecureHeadersWithConfig(new Response, $config);
         $headers = $response->headers->all();
 
+        $this->assertArrayHasKey('expect-ct', $headers);
         $this->assertEquals("max-age={$time}", $headers['expect-ct'][0]);
+        $this->assertBaseHeadersPresent($headers);
     }
 
     /*
