@@ -51,7 +51,6 @@ class ApplySecureHeadersTest extends TestCase
     {
         // configuration
         $configMap = [
-            'hsts.enabled' => true,
             'hsts.maxAge' => 1337,
         ];
 
@@ -60,6 +59,27 @@ class ApplySecureHeadersTest extends TestCase
 
         $this->assertArrayHasKey('strict-transport-security', $headers);
         $this->assertSame($headers['strict-transport-security'][0], 'max-age=1337');
+        $this->assertBaseHeadersPresent($headers);
+    }
+
+    /**
+     * Ensure that HSTS is not applied if insufficient criteria met.
+     *
+     * @return void
+     */
+    public function testHstsInvalid()
+    {
+        // configuration
+        $configMap = [
+            // needs `maxAge` or `enabled` (for default maxAge)
+            'hsts.includeSubDomains' => true,
+            'hsts.preload' => true,
+        ];
+
+        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $headers = $result->headers->all();
+
+        $this->assertArrayNotHasKey('strict-transport-security', $headers);
         $this->assertBaseHeadersPresent($headers);
     }
 

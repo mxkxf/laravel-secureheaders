@@ -79,22 +79,21 @@ class ApplySecureHeaders
      */
     private function setHsts()
     {
-        if ($this->config->get('secure-headers.hsts.enabled', false)) {
-            $maxAge = $this->config->get('secure-headers.hsts.maxAge');
-            if (isset($maxAge)) {
-                $this->headers->hsts($maxAge);
-            } else {
+        if ($hsts = $this->config->get('secure-headers.hsts', false)) {
+            if (isset($hsts['maxAge'])) {
+                $this->headers->hsts($hsts['maxAge']);
+            } elseif (isset($hsts['enabled'])) {
                 $this->headers->hsts();
+            } else {
+                return;
             }
 
-            $subdomains = $this->config->get('secure-headers.hsts.includeSubDomains');
-            if (isset($subdomains)) {
-                $this->headers->hstsSubdomains($subdomains);
+            if (isset($hsts['includeSubDomains'])) {
+                $this->headers->hstsSubdomains($hsts['includeSubDomains']);
             }
 
-            $preload = $this->config->get('secure-headers.hsts.preload');
-            if (isset($preload)) {
-                $this->headers->hstsPreload($preload);
+            if (isset($hsts['preload'])) {
+                $this->headers->hstsPreload($hsts['preload']);
             }
         }
     }
