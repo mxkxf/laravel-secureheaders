@@ -31,7 +31,7 @@ class ApplySecureHeadersTest extends TestCase
     {
         // configuration
         $configMap = [
-            ['secure-headers.hsts.enabled', false, true],
+            'hsts.enabled' => true,
         ];
 
         $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
@@ -51,8 +51,8 @@ class ApplySecureHeadersTest extends TestCase
     {
         // configuration
         $configMap = [
-            ['secure-headers.hsts.enabled', false, true],
-            ['secure-headers.hsts.maxAge', null, 1337],
+            'hsts.enabled' => true,
+            'hsts.maxAge' => 1337,
         ];
 
         $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
@@ -72,8 +72,8 @@ class ApplySecureHeadersTest extends TestCase
     {
         // configuration
         $configMap = [
-            ['secure-headers.hsts.enabled', false, true],
-            ['secure-headers.hsts.includeSubDomains', null, true],
+            'hsts.enabled' => true,
+            'hsts.includeSubDomains' => true,
         ];
 
         $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
@@ -93,8 +93,8 @@ class ApplySecureHeadersTest extends TestCase
     {
         // configuration
         $configMap = [
-            ['secure-headers.hsts.enabled', false, true],
-            ['secure-headers.hsts.preload', null, true],
+            'hsts.enabled' => true,
+            'hsts.preload' => true,
         ];
 
         $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
@@ -114,9 +114,9 @@ class ApplySecureHeadersTest extends TestCase
     {
         // configuration
         $configMap = [
-            ['secure-headers.hsts.enabled', false, true],
-            ['secure-headers.hsts.includeSubDomains', null, true],
-            ['secure-headers.hsts.preload', null, true],
+            'hsts.enabled' => true,
+            'hsts.includeSubDomains' => true,
+            'hsts.preload' => true,
         ];
 
         $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
@@ -138,8 +138,8 @@ class ApplySecureHeadersTest extends TestCase
         $headers = $response->headers->all();
         // configuration
         $configMap = [
-            ['secure-headers.hsts.enabled', false, true],
-            ['secure-headers.safeMode', false, true],
+            'hsts.enabled' => true,
+            'safeMode' => true,
         ];
 
         $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
@@ -177,8 +177,8 @@ class ApplySecureHeadersTest extends TestCase
     {
         // configuration
         $configMap = [
-            ['secure-headers.strictMode', false, true],
-            ['secure-headers.safeMode', false, true],
+            'strictMode' => true,
+            'safeMode' => true,
         ];
 
         $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
@@ -200,7 +200,7 @@ class ApplySecureHeadersTest extends TestCase
     {
         // configuration
         $configMap = [
-            ['secure-headers.strictMode', false, true],
+            'strictMode' => true,
         ];
 
         $response = new Response;
@@ -230,12 +230,12 @@ class ApplySecureHeadersTest extends TestCase
     {
         // configuration
         $configMap = [
-            ['secure-headers.csp', [], [
+            'csp' => [
                 'default' => 'self',
                 'base' => 'self',
                 'script' => ['https://example.com', 'self'],
                 'object' => ['none'],
-            ]],
+            ],
         ];
 
         $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
@@ -258,12 +258,12 @@ class ApplySecureHeadersTest extends TestCase
     {
         // configuration
         $configMap = [
-            ['secure-headers.cspro', [], [
+            'cspro' => [
                 'default' => 'self',
                 'base' => 'self',
                 'script' => ['https://example.com', 'self'],
                 'object' => ['none'],
-            ]],
+            ],
         ];
 
         $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
@@ -297,27 +297,42 @@ class ApplySecureHeadersTest extends TestCase
      * Apply SecureHeaders from the given config to a Response.
      *
      * @param Response $response
-     * @param ?array $configMap
+     * @param array $configMap
      * @return Response
      */
-    private function applySecureHeadersWithConfig(
-        Response $response,
-        array $configMap = null
-    ) {
+    private function applySecureHeadersWithConfig(Response $response, array $configMap = [])
+    {
+        // convert the configMap dot keys into deeply nested array
+        $configMap = [
+            'secure-headers' => ! empty($configMap)
+                ? array_merge_recursive(...array_map(
+                    [self::class, 'nonMutatingDataFill'],
+                    array_fill(0, count($configMap), []),
+                    array_keys($configMap),
+                    $configMap
+                ))
+                : []
+        ];
+
+        /** @var Repository|\PHPUnit_Framework_MockObject_MockObject $config */
         $config = $this->createMock(Repository::class);
-        if (isset($configMap)) {
-            $config->method('get')->will($this->returnValueMap($configMap));
-        }
-        // return default (second arg) if not in configuration
-        $config->method('get')->will($this->returnArgument(1));
 
-        $secureHeaders = new SecureHeaders;
+        $config->expects($this->any())
+            ->method('get')
+            ->with($this->anything())
+            ->will($this->returnCallback(function (string $key, $default) use ($configMap) {
+                return array_get($configMap, $key, $default);
+            }));
+
+        $secureHeaders = new SecureHeaders();
         $secureHeaders->errorReporting(false);
-        $middleware    = new ApplySecureHeaders($config, $secureHeaders);
+        $middleware = new ApplySecureHeaders($config, $secureHeaders);
 
-        return $middleware->handle(
-            new Request,
-            function () use ($response) { return $response; }
-        );
+        return $middleware->handle(new Request, function () use ($response) { return $response; });
+    }
+
+    private static function nonMutatingDataFill(array $array, string $key, $value) {
+        data_fill($array, $key, $value);
+        return $array;
     }
 }
