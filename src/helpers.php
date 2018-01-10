@@ -8,7 +8,7 @@ if (!function_exists('csp_nonce')) {
      * The nonce will be regenerated once per pageload.
      * @return string
      */
-    function csp_none(): string
+    function csp_nonce(): string
     {
         return CSPNonce::get();
     }
