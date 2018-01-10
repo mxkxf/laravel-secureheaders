@@ -2,6 +2,7 @@
 
 namespace MikeFrancis\LaravelSecureHeaders;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 class ServiceProvider extends IlluminateServiceProvider
