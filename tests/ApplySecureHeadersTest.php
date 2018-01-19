@@ -20,7 +20,8 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testMiddlewareAddsBaseHeaders()
     {
-        $result = $this->applySecureHeadersWithConfig(new Response, []);
+        $result = $this->applySecureHeadersWithConfig(new Response(), []);
+
         $this->assertBaseHeadersPresent($result->headers->all());
     }
 
@@ -31,12 +32,13 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testHsts()
     {
-        // configuration
         $configMap = [
-            'hsts.enabled' => true,
+            'hsts' => [
+                'enabled' => true,
+            ],
         ];
 
-        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $result = $this->applySecureHeadersWithConfig(new Response(), $configMap);
         $headers = $result->headers->all();
 
         $this->assertArrayHasKey('strict-transport-security', $headers);
@@ -51,12 +53,13 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testHstsMaxAge()
     {
-        // configuration
         $configMap = [
-            'hsts.maxAge' => 1337,
+            'hsts' => [
+                'maxAge' => 1337,
+            ],
         ];
 
-        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $result = $this->applySecureHeadersWithConfig(new Response(), $configMap);
         $headers = $result->headers->all();
 
         $this->assertArrayHasKey('strict-transport-security', $headers);
@@ -71,14 +74,14 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testHstsInvalid()
     {
-        // configuration
         $configMap = [
-            // needs `maxAge` or `enabled` (for default maxAge)
-            'hsts.includeSubDomains' => true,
-            'hsts.preload' => true,
+            'hsts' => [
+                'includeSubDomains' => true,
+                'preload' => true,
+            ],
         ];
 
-        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $result = $this->applySecureHeadersWithConfig(new Response(), $configMap);
         $headers = $result->headers->all();
 
         $this->assertArrayNotHasKey('strict-transport-security', $headers);
@@ -92,13 +95,14 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testHstsSubdomains()
     {
-        // configuration
         $configMap = [
-            'hsts.enabled' => true,
-            'hsts.includeSubDomains' => true,
+            'hsts' => [
+                'enabled' => true,
+                'includeSubDomains' => true,
+            ],
         ];
 
-        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $result = $this->applySecureHeadersWithConfig(new Response(), $configMap);
         $headers = $result->headers->all();
 
         $this->assertArrayHasKey('strict-transport-security', $headers);
@@ -113,13 +117,14 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testHstsPreload()
     {
-        // configuration
         $configMap = [
-            'hsts.enabled' => true,
-            'hsts.preload' => true,
+            'hsts' => [
+                'enabled' => true,
+                'preload' => true,
+            ],
         ];
 
-        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $result = $this->applySecureHeadersWithConfig(new Response(), $configMap);
         $headers = $result->headers->all();
 
         $this->assertArrayHasKey('strict-transport-security', $headers);
@@ -134,14 +139,15 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testHstsSubdomainsAndPreload()
     {
-        // configuration
         $configMap = [
-            'hsts.enabled' => true,
-            'hsts.includeSubDomains' => true,
-            'hsts.preload' => true,
+            'hsts' => [
+                'enabled' => true,
+                'includeSubDomains' => true,
+                'preload' => true,
+            ],
         ];
 
-        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $result = $this->applySecureHeadersWithConfig(new Response(), $configMap);
         $headers = $result->headers->all();
 
         $this->assertArrayHasKey('strict-transport-security', $headers);
@@ -156,15 +162,14 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testHstsAndSafeMode()
     {
-        $response = $this->applySecureHeadersWithConfig(new Response());
-        $headers = $response->headers->all();
-        // configuration
         $configMap = [
-            'hsts.enabled' => true,
+            'hsts' => [
+                'enabled' => true,
+            ],
             'safeMode' => true,
         ];
 
-        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $result = $this->applySecureHeadersWithConfig(new Response(), $configMap);
         $headers = $result->headers->all();
 
         $this->assertArrayHasKey('strict-transport-security', $headers);
@@ -181,10 +186,12 @@ class ApplySecureHeadersTest extends TestCase
     {
         $time = time();
         $config = [
-            'expectCT.maxAge' => $time,
+            'expectCT' => [
+                'maxAge' => $time,
+            ],
         ];
 
-        $response = $this->applySecureHeadersWithConfig(new Response, $config);
+        $response = $this->applySecureHeadersWithConfig(new Response(), $config);
         $headers = $response->headers->all();
 
         $this->assertArrayHasKey('expect-ct', $headers);
@@ -199,13 +206,12 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testStrictModeAndSafeMode()
     {
-        // configuration
         $configMap = [
             'strictMode' => true,
             'safeMode' => true,
         ];
 
-        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $result = $this->applySecureHeadersWithConfig(new Response(), $configMap);
         $headers = $result->headers->all();
 
         $this->assertArrayHasKey('strict-transport-security', $headers);
@@ -222,7 +228,6 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testStrictMode()
     {
-        // configuration
         $configMap = [
             'strictMode' => true,
         ];
@@ -231,7 +236,7 @@ class ApplySecureHeadersTest extends TestCase
         $response->headers->set('set-cookie', 'session=secret');
         $response->headers->set('content-security-policy', "default-src 'nonce-1234'");
 
-        $result  = $this->applySecureHeadersWithConfig($response, $configMap);
+        $result = $this->applySecureHeadersWithConfig($response, $configMap);
         $headers = $result->headers->all();
 
         $this->assertArrayHasKey('strict-transport-security', $headers);
@@ -252,7 +257,6 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testCSP()
     {
-        // configuration
         $configMap = [
             'csp' => [
                 'default' => 'self',
@@ -262,7 +266,7 @@ class ApplySecureHeadersTest extends TestCase
             ],
         ];
 
-        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $result = $this->applySecureHeadersWithConfig(new Response(), $configMap);
         $headers = $result->headers->all();
 
         $this->assertArrayHasKey('content-security-policy', $headers);
@@ -280,7 +284,6 @@ class ApplySecureHeadersTest extends TestCase
      */
     public function testCSPRO()
     {
-        // configuration
         $configMap = [
             'cspro' => [
                 'default' => 'self',
@@ -290,7 +293,7 @@ class ApplySecureHeadersTest extends TestCase
             ],
         ];
 
-        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $result = $this->applySecureHeadersWithConfig(new Response(), $configMap);
         $headers = $result->headers->all();
 
         $this->assertArrayHasKey('content-security-policy-report-only', $headers);
