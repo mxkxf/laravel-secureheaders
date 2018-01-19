@@ -66,8 +66,10 @@ class ApplySecureHeaders
     private function setCsp()
     {
         $csp = $this->config->get('secure-headers.csp', []);
-
         $this->headers->csp($csp);
+
+        $cspro = $this->config->get('secure-headers.cspro', []);
+        $this->headers->cspro($cspro);
     }
 
     /**
@@ -77,13 +79,27 @@ class ApplySecureHeaders
      */
     private function setHsts()
     {
-        if ($this->config->get('secure-headers.hsts.enabled', false)) {
-            $this->headers->hsts();
+        if ($hsts = $this->config->get('secure-headers.hsts', false)) {
+            if (isset($hsts['maxAge'])) {
+                $this->headers->hsts($hsts['maxAge']);
+            } elseif (isset($hsts['enabled'])) {
+                $this->headers->hsts();
+            } else {
+                return;
+            }
+
+            if (isset($hsts['includeSubDomains'])) {
+                $this->headers->hstsSubdomains($hsts['includeSubDomains']);
+            }
+
+            if (isset($hsts['preload'])) {
+                $this->headers->hstsPreload($hsts['preload']);
+            }
         }
     }
 
     /**
-     * Set safe mode, if it is required.
+     * Set safe or (inclusive) strict mode, if it is required.
      *
      * @return void
      */
@@ -91,6 +107,10 @@ class ApplySecureHeaders
     {
         if ($this->config->get('secure-headers.safeMode', false)) {
             $this->headers->safeMode();
+        }
+
+        if ($this->config->get('secure-headers.strictMode', false)) {
+            $this->headers->strictMode();
         }
     }
 
