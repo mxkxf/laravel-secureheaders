@@ -1,15 +1,32 @@
 <?php
 
-use MikeFrancis\LaravelSecureHeaders\CSPNonce;
+use Illuminate\Container\Container;
+use MikeFrancis\LaravelSecureHeaders\Exceptions\ContentSecurityPolicyNotFoundException;
 
 if (!function_exists('csp_nonce')) {
     /**
-     * Provide a base-64 CSP nonce that can be used for inline styles.
-     * The nonce will be regenerated once per pageload.
+     * The nonce will be regenerated once per page load.
+     *
+     * @param string $friendlyDirective
      * @return string
+     * @throws ContentSecurityPolicyNotFoundException
      */
-    function csp_nonce(): string
+    function csp_nonce(string $friendlyDirective)
     {
-        return CSPNonce::get();
+        $app = Container::getInstance();
+        $request = $app['request'];
+        $cspHeader = $request->headers->get('content-security-policy');
+
+        if (!$cspHeader) {
+            throw new ContentSecurityPolicyNotFoundException();
+        }
+
+        $parts = explode(' ', $cspHeader, 2);
+
+        if ($parts[0] === $friendlyDirective) {
+            return $parts[1];
+        }
+
+        return null;
     }
 }
