@@ -50,6 +50,7 @@ class ApplySecureHeaders
         $this->setCsp();
         $this->setMode();
         $this->setExpectCT();
+        $this->setCspNonces();
 
         $adapter = new Adapter($response);
 
@@ -127,6 +128,20 @@ class ApplySecureHeaders
                 array_get($expectCT, 'enforce'),
                 array_get($expectCT, 'reportUri')
             );
+        }
+    }
+
+    /**
+     * Set the CSP Nonces.
+     *
+     * @return void
+     */
+    private function setCspNonces()
+    {
+        if ($cspNonces = $this->config->get('secure-headers.cspNonces', [])) {
+            foreach ($cspNonces as $cspNonce) {
+                $this->headers->cspNonce($cspNonce);
+            }
         }
     }
 }
