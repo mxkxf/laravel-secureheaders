@@ -30,5 +30,12 @@
         "psr-4": {
             "MikeFrancis\\LaravelSecureHeaders\\Tests\\": "tests/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MikeFrancis\\LaravelSecureHeaders\\ServiceProvider"
+            ]
+        }
     }
 }
