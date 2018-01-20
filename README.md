@@ -14,21 +14,7 @@ Require the `mikefrancis/laravel-secureheaders` package in your `composer.json` 
 composer require mikefrancis/laravel-secureheaders
 ```
 
-If you are using Laravel 5.5+, you can then edit your `composer.json` to add the service provider and enable auto discovery:
-
-```json
-{
-    "extra": {
-        "laravel": {
-            "providers": [
-                "MikeFrancis\\LaravelSecureHeaders\\ServiceProvider"
-            ]
-        }
-    }
-}
-```
-
-If you are using Laravel 5.4, add the service provider to your `config/app.php` providers array:
+If you are using Laravel 5.5+, package discovery is enabled. For Laravel 5.4, add the service provider to your `config/app.php` providers array:
 
 ```php
 MikeFrancis\LaravelSecureHeaders\ServiceProvider::class,
