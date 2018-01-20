@@ -21,10 +21,14 @@ if (!function_exists('csp_nonce')) {
             throw new ContentSecurityPolicyNotFoundException();
         }
 
-        $parts = explode(' ', $cspHeader, 2);
+        $contentTypes = explode('; ', $cspHeader);
 
-        if ($parts[0] === $friendlyDirective) {
-            return $parts[1];
+        foreach ($contentTypes as $contentType) {
+            preg_match("/([a-z]+)-src 'nonce-([^']+)'/", $contentType, $matches);
+
+            if ($matches[1] === $friendlyDirective) {
+                return $matches[2];
+            }
         }
 
         return null;
