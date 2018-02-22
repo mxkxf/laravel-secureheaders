@@ -1,6 +1,9 @@
 <?php
 
 return [
+    // Toggles error reporting, see https://github.com/aidantwoods/SecureHeaders/wiki/errorReporting
+    'errorReporting' => true,
+
     // Safe mode
     'safeMode' => false,
 
