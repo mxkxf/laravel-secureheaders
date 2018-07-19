@@ -46,6 +46,8 @@ class ApplySecureHeaders
     {
         $response = $next($request);
 
+        $this->headers->errorReporting($this->config->get('secure-headers.errorReporting', true));
+
         $this->setHsts();
         $this->setCsp();
         $this->setMode();
