@@ -6,6 +6,7 @@ use Aidantwoods\SecureHeaders\SecureHeaders;
 use Closure;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class ApplySecureHeaders
 {
@@ -125,9 +126,9 @@ class ApplySecureHeaders
     {
         if ($expectCT = $this->config->get('secure-headers.expectCT', false)) {
             $this->headers->expectCT(
-                array_get($expectCT, 'maxAge'),
-                array_get($expectCT, 'enforce'),
-                array_get($expectCT, 'reportUri')
+                Arr::get($expectCT, 'maxAge'),
+                Arr::get($expectCT, 'enforce'),
+                Arr::get($expectCT, 'reportUri')
             );
         }
     }
