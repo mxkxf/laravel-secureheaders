@@ -1,12 +1,12 @@
 language: php
 
 php:
-  - '7.0'
-  - '7.1'
-  - '7.2'
-  - '7.3'
-  - '7.4snapshot'
-  
+  - "7.0"
+  - "7.1"
+  - "7.2"
+  - "7.3"
+  - "7.4snapshot"
+
 cache:
   directories:
     - $HOME/.composer/cache
@@ -15,7 +15,8 @@ install:
   - composer install --no-interaction
 
 script:
-  - vendor/bin/phpunit --coverage-clover=coverage.xml
+  - ./vendor/bin/phpcs config src tests --standard=psr2
+  - ./vendor/bin/phpunit --coverage-clover=coverage.xml
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
