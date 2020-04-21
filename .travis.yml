@@ -1,8 +1,6 @@
 language: php
 
 php:
-  - "7.0"
-  - "7.1"
   - "7.2"
   - "7.3"
   - "7.4"
@@ -15,8 +13,8 @@ install:
   - composer install --no-interaction
 
 script:
-  - ./vendor/bin/phpcs config src tests --standard=psr2
-  - ./vendor/bin/phpunit --coverage-clover=coverage.xml
+  - composer run-script lint
+  - composer run-script test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

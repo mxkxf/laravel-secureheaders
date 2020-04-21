@@ -20,6 +20,11 @@
         "phpunit/phpunit": "^6.2",
         "squizlabs/php_codesniffer": "^3.5"
     },
+    "scripts": {
+        "lint": "phpcs config src tests --standard=psr2",
+        "test": "phpunit",
+        "test:coverage": "phpunit --coverage-clover=coverage.xml"
+    },
     "autoload": {
         "psr-4": {
             "MikeFrancis\\LaravelSecureHeaders\\": "src/"
