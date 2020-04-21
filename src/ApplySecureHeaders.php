@@ -53,6 +53,7 @@ class ApplySecureHeaders
         $this->setCsp();
         $this->setMode();
         $this->setExpectCT();
+        $this->setProtectedCookies();
 
         $adapter = new Adapter($response);
 
@@ -63,8 +64,6 @@ class ApplySecureHeaders
 
     /**
      * Set any Content Security Policy headers.
-     *
-     * @return void
      */
     private function setCsp()
     {
@@ -77,8 +76,6 @@ class ApplySecureHeaders
 
     /**
      * Set any Strict-Transport-Policy headers.
-     *
-     * @return void
      */
     private function setHsts()
     {
@@ -103,8 +100,6 @@ class ApplySecureHeaders
 
     /**
      * Set safe or (inclusive) strict mode, if it is required.
-     *
-     * @return void
      */
     private function setMode()
     {
@@ -119,8 +114,6 @@ class ApplySecureHeaders
 
     /**
      * Set any Expect-CT headers.
-     *
-     * @return void
      */
     private function setExpectCT()
     {
@@ -131,5 +124,36 @@ class ApplySecureHeaders
                 Arr::get($expectCT, 'reportUri')
             );
         }
+    }
+
+    /**
+     * Set any protected cookies.
+     */
+    private function setProtectedCookies()
+    {
+        $this->headers->protectedCookie('lol');
+        // $namesToAdd = $this->config->get('secure-headers.protectedCookies.add.names', []);
+
+        // if (count($namesToAdd)) {
+        // $this->headers->protectedCookie($namesToAdd);
+        // }
+
+        // $subStringsToAdd = $this->config->get('secure-headers.protectedCookies.add.substrings', []);
+
+        // if (count($subStringsToAdd)) {
+        //     $this->headers->protectedCookie($subStringsToAdd);
+        // }
+
+        // $namesToRemove = $this->config->get('secure-headers.protectedCookies.add.names', []);
+
+        // if (count($namesToRemove)) {
+        //     $this->headers->protectedCookie($namesToRemove);
+        // }
+
+        // $subStringsToRemove = $this->config->get('secure-headers.protectedCookies.add.substrings', []);
+
+        // if (count($subStringsToRemove)) {
+        //     $this->headers->protectedCookie($subStringsToRemove);
+        // }
     }
 }

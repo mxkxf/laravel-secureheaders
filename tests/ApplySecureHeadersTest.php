@@ -8,8 +8,6 @@ class ApplySecureHeadersTest extends TestCase
 {
     /**
      * Ensure that the middleware adds the base headers.
-     *
-     * @return void
      */
     public function testMiddlewareAddsBaseHeaders()
     {
@@ -19,8 +17,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /**
      * Ensure that HSTS is applied.
-     *
-     * @return void
      */
     public function testHsts()
     {
@@ -39,8 +35,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /**
      * Ensure that HSTS max-age is applied.
-     *
-     * @return void
      */
     public function testHstsMaxAge()
     {
@@ -59,8 +53,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /**
      * Ensure that HSTS is not applied if insufficient criteria met.
-     *
-     * @return void
      */
     public function testHstsInvalid()
     {
@@ -80,8 +72,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /**
      * Ensure that HSTS includeSubdomains is applied.
-     *
-     * @return void
      */
     public function testHstsSubdomains()
     {
@@ -101,8 +91,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /**
      * Ensure that HSTS preload is applied.
-     *
-     * @return void
      */
     public function testHstsPreload()
     {
@@ -122,8 +110,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /**
      * Ensure that HSTS subdomains and preload is applied.
-     *
-     * @return void
      */
     public function testHstsSubdomainsAndPreload()
     {
@@ -144,8 +130,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /**
      * Ensure that safe-mode neuters HSTS.
-     *
-     * @return void
      */
     public function testHstsAndSafeMode()
     {
@@ -167,8 +151,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /**
      * Ensure that the middleware adds the expect-ct headers.
-     *
-     * @return void
      */
     public function testMiddlewareAddsExpectCTHeaders()
     {
@@ -187,8 +169,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /*
      * Ensure that safe-mode neuters strict-mode.
-     *
-     * @return void
      */
     public function testStrictModeAndSafeMode()
     {
@@ -210,8 +190,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /**
      * Ensure that strict-mode applies strictness.
-     *
-     * @return void
      */
     public function testStrictMode()
     {
@@ -240,8 +218,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /**
      * Ensure that CSP is applied.
-     *
-     * @return void
      */
     public function testCSP()
     {
@@ -268,8 +244,6 @@ class ApplySecureHeadersTest extends TestCase
 
     /**
      * Ensure that CSP report-only is applied.
-     *
-     * @return void
      */
     public function testCSPRO()
     {
@@ -291,6 +265,30 @@ class ApplySecureHeadersTest extends TestCase
             $headers['content-security-policy-report-only'][0],
             "default-src 'self'; base-uri 'self'; script-src https://example.com 'self'; object-src 'none'"
         );
+        $this->assertBaseHeadersPresent($headers);
+    }
+
+    public function testProtectedCookies()
+    {
+        // configuration
+        $configMap = [
+            'protectedCookies' => [
+                'add' => [
+                    'names' => ['lol'],
+                    'substrings' => ['whut'],
+                ],
+                'remove' => [
+                    'names' => [],
+                    'substrings' => [],
+                ],
+            ],
+        ];
+
+        $result  = $this->applySecureHeadersWithConfig(new Response, $configMap);
+        $headers = $result->headers->all();
+
+        dd($result);
+
         $this->assertBaseHeadersPresent($headers);
     }
 }

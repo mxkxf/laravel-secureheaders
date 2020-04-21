@@ -22,6 +22,7 @@
     },
     "scripts": {
         "lint": "phpcs config src tests --standard=psr2",
+        "format": "./vendor/bin/phpcbf src config tests --standard=psr2",
         "test": "phpunit",
         "test:coverage": "phpunit --coverage-clover=coverage.xml"
     },

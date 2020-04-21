@@ -16,4 +16,16 @@ return [
     'csp' => [
         'default' => 'self',
     ],
+
+    // Protected cookies
+    'protectedCookies' => [
+        'add' => [
+            'names' => [],
+            'substrings' => [],
+        ],
+        'remove' => [
+            'names' => [],
+            'substrings' => [],
+        ],
+    ],
 ];
