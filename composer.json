@@ -10,7 +10,6 @@
         }
     ],
     "require": {
-        "php": "7.x",
         "aidantwoods/secureheaders": "^2.0",
         "illuminate/contracts": ">=5.4",
         "illuminate/http": ">=5.4",
